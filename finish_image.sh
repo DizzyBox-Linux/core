@@ -23,8 +23,7 @@ mount ${loopdev}p1 mountpt
 cd mountpt
 
 mkdir -p usr/{sbin,bin} bin sbin boot
-mkdir -p {dev,etc,home,lib}
-mkdir -p {mnt,opt,proc,srv,sys}
+mkdir -p {dev,etc,home,lib,run,mnt,opt,proc,srv,sys}
 mkdir -p var/{lib,lock,log,run,spool}
 install -d -m 0750 root
 install -d -m 1777 tmp
