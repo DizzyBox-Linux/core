@@ -21,13 +21,13 @@ if [[ ! -f outputs/bzImage ]]; then
 		tar -xf linux-${k_ver}.tar.xz
 	fi
 
-	ls | grep kernel-config
+	ls kernel-configs
 	printf "kconfig filename (or blank for defconfig): "
 	read cfg
 
 	pushd linux-${k_ver}
 	if [[ ! "$cfg" == "" ]]; then
-		cp ../$cfg .config
+		cp ../kernel-configs/$cfg .config
 		make oldconfig
 	else
 		make defconfig
