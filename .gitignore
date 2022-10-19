@@ -6,3 +6,5 @@ linux-*
 fs.tar
 image
 kernel-headers
+limine*
+outputs/

@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 
+set -ex
+
 k_ver="6.0.2"
 k_src="https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${k_ver}.tar.xz"
 
 b_ver="1.33.2"
 b_src="https://busybox.net/downloads/busybox-${b_ver}.tar.bz2"
+
+LIMINE_VER="3.20.1"
+LIMINE_SRC="https://github.com/limine-bootloader/limine/releases/download/v${LIMINE_VER}/limine-${LIMINE_VER}.tar.gz"
 
 if [[ ! -d outputs ]]; then
 	mkdir outputs
@@ -34,6 +39,17 @@ if [[ ! -f outputs/busybox ]]; then
 	make menuconfig
 	make CC=musl-gcc
 	cp busybox ../outputs/.
+	popd
+fi
+
+if [[ ! -f outputs/limine.sys ]]; then
+	[[ -d limine-${LIMINE_VER} ]] && rm -rf limine-${LIMINE_VER}*
+	wget $LIMINE_SRC
+	tar -xf limine*
+	pushd limine-${LIMINE_VER}
+	CC=musl-gcc ./configure --enable-bios --enable-uefi-x86_64 --enable-limine-deploy
+	make
+	cp bin/limine{-deploy,.sys} ../outputs/.
 	popd
 fi
 

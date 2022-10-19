@@ -3,7 +3,6 @@
 set -ex
 
 LIMINE_VER="3.20.1"
-LIMINE_SRC="https://github.com/limine-bootloader/limine/releases/download/v${LIMINE_VER}/limine-${LIMINE_VER}.tar.gz"
 
 if [[ ! "$EUID" == "0" ]]; then
 	echo "Run as root"
@@ -41,17 +40,9 @@ done
 cp -rv ../filesystem/etc/* etc/.
 cp ../filesystem/usr/share/udhcpc/default.script usr/share/udhcpc/.
 cp ../filesystem/boot/limine.cfg boot/.
+cp ../outputs/limine.sys boot/.
 
 cd ../
-
-[[ -d limine-${LIMINE_VER} ]] && rm -rf limine-${LIMINE_VER}
-wget $LIMINE_SRC
-tar -xf limine*
-pushd limine-${LIMINE_VER}
-CC=musl-gcc ./configure --enable-bios --enable-uefi-x86_64 --enable-limine-deploy
-make
-cp bin/limine.sys ../mountpt/boot/. -v
-popd
 
 cd mountpt
 
@@ -73,5 +64,4 @@ rm -rf mountpt
 
 losetup -D
 
-limine-${LIMINE_VER}/bin/limine-deploy ./image
-rm -rf limine-${LIMINE_VER}*
+./outputs/limine-deploy ./image
