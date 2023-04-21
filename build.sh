@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 
+export PATH=/sbin/:$PATH
+
 set -ex
 
-k_ver="6.0.2"
+k_ver="6.2.12"
 k_src="https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${k_ver}.tar.xz"
 
 b_ver="1.33.2"
 b_src="https://busybox.net/downloads/busybox-${b_ver}.tar.bz2"
 
-LIMINE_VER="3.20.1"
+LIMINE_VER="4.20230414.0"
 LIMINE_SRC="https://github.com/limine-bootloader/limine/releases/download/v${LIMINE_VER}/limine-${LIMINE_VER}.tar.gz"
 
 if [[ ! -d outputs ]]; then
@@ -62,15 +64,22 @@ if [[ ! -f outputs/limine.sys ]]; then
 	CC=musl-gcc ./configure --enable-bios --enable-uefi-x86_64 --enable-limine-deploy
 	make
 	cp bin/limine{-deploy,.sys} ../outputs/.
+	cp bin/BOOTX64.EFI ../outputs/.
 	popd
 fi
 
-fallocate -l200M image
+fallocate -l2048M image
 
 (
-	echo "o"
+	echo "g"
 	echo "n"
 	echo
+	echo
+	echo "+500M"
+	echo "t"
+	echo
+	echo "1"
+	echo "n"
 	echo
 	echo
 	echo
