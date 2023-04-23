@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 export PATH=/sbin/:$PATH
 
 set -ex
@@ -20,8 +19,9 @@ fi
 if [[ ! -f outputs/bzImage ]]; then
 	if [[ ! -f linux-${k_ver}.tar.xz ]]; then
 		wget $k_src
-		tar -xf linux-${k_ver}.tar.xz
 	fi
+
+	[[ ! -d linux-${k_ver} ]] && tar -xvf linux-${k_ver}.tar.xz
 
 	ls kernel-configs
 	printf "kconfig filename (or blank for defconfig): "
@@ -40,7 +40,7 @@ if [[ ! -f outputs/bzImage ]]; then
 	make -j$(nproc)
 	cp arch/x86/boot/bzImage ../outputs/.
 	cp System.map ../outputs/.
-	popd	
+	popd
 fi
 
 if [[ ! -f outputs/busybox ]]; then
