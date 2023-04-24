@@ -12,6 +12,12 @@ b_src="https://busybox.net/downloads/busybox-${b_ver}.tar.bz2"
 LIMINE_VER="4.20230414.0"
 LIMINE_SRC="https://github.com/limine-bootloader/limine/releases/download/v${LIMINE_VER}/limine-${LIMINE_VER}.tar.gz"
 
+GRUB_VER="2.06"
+GRUB_SRC="https://ftp.gnu.org/gnu/grub/grub-${GRUB_VER}.tar.xz"
+
+GLIBC_VER="2.37"
+GLIBC_SRC="https://ftp.gnu.org/gnu/glibc/glibc-${GLIBC_VER}.tar.xz"
+
 if [[ ! -d outputs ]]; then
 	mkdir outputs
 fi
@@ -65,6 +71,36 @@ if [[ ! -f outputs/limine.sys ]]; then
 	make
 	cp bin/limine{-deploy,.sys} ../outputs/.
 	cp bin/BOOTX64.EFI ../outputs/.
+	popd
+fi
+
+if [[ ! -f outputs/glibc-done ]]; then
+	[[ -d glibc-${GLIBC_VER} ]] && rm -rf glibc-${GLIBC_VER}
+	[[ ! -f glibc-${GLIBC_VER}.tar.xz ]] && wget $
+	[[ ! -d outputs/glibc ]] && mkdir -p outputs/glibc
+	dest="$(pwd)/outputs/glibc"
+	tar -xvf glibc-${GLIBC_VER}.tar.xz
+	pushd glibc-${GLIBC_VER}
+	mkdir build && pushd build
+	../configure --prefix=/usr
+	make -j$(nproc)
+	make install DESTDIR=$dest
+	popd
+	popd
+	touch outputs/glibc-done
+fi
+
+if [[ ! -f outputs/grub-installed ]]; then
+	[[ -d grub-${GRUB_VER} ]] && rm -rf grub-${GRUB_VER}
+	[[ ! -f grub-${GRUB_VER}.tar.xz ]] && wget $GRUB_SRC
+	[[ ! -d outputs/grub-stuff ]] && mkdir -p outputs/grub-stuff
+	tar -xvf grub-${GRUB_VER}.tar.xz
+	dest="$(pwd)/outputs/grub-stuff"
+	pushd grub-${GRUB_VER}
+	./configure
+	make -j$(nproc)
+	make install DESTDIR=$dest
+	touch ../outputs/grub-installed
 	popd
 fi
 

@@ -37,6 +37,8 @@ mkdir -p usr/{include,lib,share/udhcpc,src}
 cp ../outputs/busybox usr/bin/busybox
 cp ../outputs/bzImage boot/bzImage
 cp ../outputs/BOOTX64.EFI boot/efi/.
+cp -r ../outputs/glibc/* .
+cp -r ../outputs/grub-stuff/* .
 
 for util in $(./usr/bin/busybox --list-full); do
   if [[ ! "$util" == "busybox" ]]; then
