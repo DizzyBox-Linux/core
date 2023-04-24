@@ -57,7 +57,7 @@ if [[ ! -f outputs/busybox ]]; then
 	pushd busybox-${b_ver}
 	[[ ! -d kernel-headers ]] && git clone https://github.com/sabotage-linux/kernel-headers
 	make menuconfig
-	make CC=musl-gcc
+	make CC=musl-gcc -j$(nproc)
 	cp busybox ../outputs/.
 	popd
 fi
@@ -97,7 +97,7 @@ if [[ ! -f outputs/grub-installed ]]; then
 	tar -xvf grub-${GRUB_VER}.tar.xz
 	dest="$(pwd)/outputs/grub-stuff"
 	pushd grub-${GRUB_VER}
-	./configure
+	./configure --prefix=/usr
 	make -j$(nproc)
 	make install DESTDIR=$dest
 	touch ../outputs/grub-installed
@@ -106,20 +106,32 @@ fi
 
 fallocate -l2048M image
 
-(
-	echo "g"
-	echo "n"
-	echo
-	echo
-	echo "+500M"
-	echo "t"
-	echo
-	echo "1"
-	echo "n"
-	echo
-	echo
-	echo
-	echo "w"
-) | fdisk image
+if [[ "$BM" == "EFI" ]]; then
+	(
+		echo "g"
+		echo "n"
+		echo
+		echo
+		echo "+500M"
+		echo "t"
+		echo
+		echo "1"
+		echo "n"
+		echo
+		echo
+		echo
+		echo "w"
+	) | fdisk image
+else
+	(
+		echo "o"
+		echo "n"
+		echo
+		echo
+		echo
+		echo
+		echo "w"
+	) | fdisk image
+fi
 
 echo "now run finish_image.sh as root"
