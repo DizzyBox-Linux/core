@@ -53,8 +53,8 @@ cd ../
 
 cd mountpt
 
-partuuid=$(fdisk -l ../image | grep "Disk identifier" | awk '{split($0,a,": "); print a[2]}' | sed 's/0x//g')
-sed -i "s/something/${partuuid}-01/g" boot/limine.cfg
+#partuuid=$(fdisk -l ../image | grep "Disk identifier" | awk '{split($0,a,": "); print a[2]}' | sed 's/0x//g')
+#sed -i "s/something/${partuuid}-01/g" boot/limine.cfg
 
 cd ../
 

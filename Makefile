@@ -1,4 +1,5 @@
 stage1:
 	./build.sh
 stage2:
-	./finish_image.sh
+	sudo ./finish_image.sh
+do: stage1 stage2

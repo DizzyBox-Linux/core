@@ -1,6 +1,6 @@
 # Core
 
-Updates/edits to https://github.com/MichielDerhaeg/build-linux for small USB
+Updates/edits to https://github.com/MichielDerhaeg/build-linux
 
 ## Depends (Slackware)
 * fakeroot
@@ -12,6 +12,8 @@ Updates/edits to https://github.com/MichielDerhaeg/build-linux for small USB
 * fakeroot
 * build-essential
 * flex (not in `build-essential` i guess?)
+* libelf-dev
+* nasm
 
 ## Notes
 * enabled init msg in bb config

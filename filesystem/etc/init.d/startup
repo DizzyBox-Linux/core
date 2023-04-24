@@ -27,6 +27,8 @@ mount -t tmpfs shm /dev/shm -o mode=1777,nosuid,nodev
 # don't forget to create this file if you want to give your system a name
 if [[ -f /etc/hostname ]]; then
   cat /etc/hostname > /proc/sys/kernel/hostname
+else
+  echo "confused" > /proc/sys/kernel/hostname
 fi
 
 # mdev is a mini-udev implementation that
