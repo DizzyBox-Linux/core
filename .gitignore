@@ -9,4 +9,5 @@ kernel-headers
 limine*
 outputs/
 grub-*
+!grub-*.cfg
 glibc-*

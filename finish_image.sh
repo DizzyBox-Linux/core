@@ -4,7 +4,10 @@ export PATH=/sbin:/usr/sbin:$PATH
 
 set -ex
 
-LIMINE_VER="3.20.1"
+if [[ "$BM" == "EFI" ]]; then
+	echo "if you didn't mean to build for (U)EFI, control+c now. otherwise hit enter"
+	read
+fi
 
 if [[ ! "$EUID" == "0" ]]; then
 	echo "Run as root"
@@ -64,7 +67,14 @@ cp -rv ../filesystem/etc/* etc/.
 cp ../filesystem/usr/share/udhcpc/default.script usr/share/udhcpc/.
 cp ../filesystem/boot/limine.cfg boot/.
 mkdir -p boot/grub
-cp ../filesystem/boot/grub.cfg boot/grub/.
+
+if [[ "$BM" == "EFI" ]]; then
+	ft="uefi"
+else
+	ft="bios"
+fi
+
+cp ../filesystem/boot/grub-${ft}.cfg boot/grub/grub.cfg
 cp ../outputs/limine.sys boot/.
 
 cd ../
@@ -83,7 +93,7 @@ else
 fi
 
 partuuid=$(fdisk -l image | grep "Disk identifier" | awk '{split($0,a,": "); print a[2]}' | sed 's/0x//g')
-sed -i "s/something/${partuuid}-01/g" mountpt/boot/grub/grub.cfg
+sed -i "s/something/${partuuid}/g" mountpt/boot/grub/grub.cfg
 
 umount -R -l mountpt
 rm -rf mountpt

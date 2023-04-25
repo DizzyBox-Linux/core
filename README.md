@@ -18,3 +18,11 @@ Updates/edits to https://github.com/MichielDerhaeg/build-linux
 ## Notes
 * enabled init msg in bb config
 * `make oldconfig` - update kernel config for newer version
+
+## Build
+For a BIOS image:
+* `./build.sh`
+* `sudo ./finish_image.sh`
+For a UEFI image:
+* `BM="EFI" ./build.sh`
+* `sudo BM="EFI" ./finish_image.sh`

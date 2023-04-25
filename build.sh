@@ -3,6 +3,11 @@ export PATH=/sbin/:$PATH
 
 set -ex
 
+if [[ "$BM" == "EFI" ]]; then
+	echo "if you didn't mean to build for (U)EFI, control+c now. otherwise hit enter"
+	read
+fi
+
 k_ver="6.2.12"
 k_src="https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${k_ver}.tar.xz"
 
