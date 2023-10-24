@@ -1,3 +1,5 @@
+# We've moved to https://git.goober.cloud/dizzybox/
+
 # Core
 
 Updates/edits to https://github.com/MichielDerhaeg/build-linux
